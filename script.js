@@ -11,6 +11,22 @@
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Add3M button initial state: start hidden/offset so it animates with the rest of the UI
+    const add3mBtn = document.querySelector('.add3m-button');
+    if (add3mBtn) {
+        add3mBtn.classList.add('initial');
+        // Ensure keyboard activation works consistently
+        add3mBtn.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                add3mBtn.click();
+            }
+        });
+    }
+
+    // When button is part of header, CSS handles centering (absolute top:50%);
+    // no runtime alignment is required.
+
     // -------- Mobile Navigation --------
     const hamburger = $('#hamburgerBtn');
     const nav = $('#primaryNav');
@@ -316,4 +332,15 @@
     // -------- Initial state on load --------
     updateHeader();
     updateScrollToTop();
+    // Reveal the Add3M button in-line with other initial animations
+    if (add3mBtn) {
+        if (prefersReducedMotion) {
+            add3mBtn.classList.remove('initial');
+        } else {
+            // match header animation timing (0.8s)
+            window.setTimeout(() => {
+                add3mBtn.classList.remove('initial');
+            }, 820);
+        }
+    }
 })();
